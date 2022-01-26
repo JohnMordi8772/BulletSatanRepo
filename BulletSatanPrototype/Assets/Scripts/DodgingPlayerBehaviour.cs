@@ -47,6 +47,8 @@ public class DodgingPlayerBehaviour : MonoBehaviour
 
             NewPos.y += yMove * Time.deltaTime * speed;
 
+            NewPos.y = Mathf.Clamp(NewPos.y, -9.2f, 9.2f);
+
             transform.position = NewPos;
         }
 
@@ -58,6 +60,8 @@ public class DodgingPlayerBehaviour : MonoBehaviour
 
             NewPos.y += yMove * Time.deltaTime * speed;
 
+            NewPos.y = Mathf.Clamp(NewPos.y, -9.2f, 9.2f);
+
             transform.position = NewPos;
         }
         if (Input.GetKey("d"))
@@ -67,6 +71,8 @@ public class DodgingPlayerBehaviour : MonoBehaviour
             Vector3 NewPos = transform.position;
 
             NewPos.x += xMove * Time.deltaTime * speed;
+
+            NewPos.x = Mathf.Clamp(NewPos.x, -9.2f, 9.2f);
 
             transform.position = NewPos;
         }
@@ -78,6 +84,8 @@ public class DodgingPlayerBehaviour : MonoBehaviour
             Vector3 NewPos = transform.position;
 
             NewPos.x += xMove * Time.deltaTime * speed;
+
+            NewPos.x = Mathf.Clamp(NewPos.x, -9.2f, 9.2f);
 
             transform.position = NewPos;
         }
