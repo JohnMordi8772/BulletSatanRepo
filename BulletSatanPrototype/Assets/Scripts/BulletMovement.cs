@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class BulletMovement : MonoBehaviour
 {
-    float speed;
+    protected float speed;
     // Start is called before the first frame update
     void Start()
     {
-        speed = 0.15f;
+        speed = 3f;
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        transform.Translate(Vector2.right * speed);
+        transform.Translate(Vector2.right * speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -25,9 +25,9 @@ public class BulletMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        if(collision.tag == "Boundaries")
+        if (collision.gameObject.tag == "Boundaries")
         {
             Destroy(gameObject);
         }

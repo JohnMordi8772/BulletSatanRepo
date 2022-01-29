@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class BulletPlayer : MonoBehaviour
 {
-    [SerializeField] GameObject basicBullet, circleShotBullets, snakingBullets, bulletShooter; // references to bullet object prefabs
+    [SerializeField] GameObject basicBullet, circleShotBullets, snakingBullet, bulletShooter; // references to bullet object prefabs
     [SerializeField] GameObject playerReference; // reference to player object
+    [SerializeField] BulletSpending bulletSpending;
     int bulletChoice = 0; // choices of ability for switch statement
     bool snakeActive; //for the snaking pattern bullet ability
     // Start is called before the first frame update
@@ -26,6 +27,9 @@ public class BulletPlayer : MonoBehaviour
             switch (bulletChoice)
             {
                 case 1: // single fire bullet aimed directly at player
+                    if (bulletSpending.GetFunds() < 1f)
+                        break;
+                    bulletSpending.SpendFunds(1f);
                     Vector3 target = playerReference.transform.position - mousePosition;
                     float angle = Vector3.Angle(target, playerReference.transform.right);
                     if (mousePosition.y > playerReference.transform.position.y)
@@ -34,16 +38,31 @@ public class BulletPlayer : MonoBehaviour
                     Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle));
                     break;
                 case 2: // snaking lines of bullets from the top of the screen all the way to the bottom
+                    if (bulletSpending.GetFunds() < 15f)
+                        break;
+
                     if (!snakeActive)
+                    {
+                        bulletSpending.SpendFunds(15f);
                         StartCoroutine(SnakingPattern());
+                    }
                     break;
                 case 3: // shoots a number of bullets in a circle at mouse click
+                    if (bulletSpending.GetFunds() < 5f)
+                        break;
+                    bulletSpending.SpendFunds(5f);
                     CircleShot(mousePosition);
                     break;
                 case 4: // automatic bulllet shooter that spins and shoots for ten seconds
+                    if (bulletSpending.GetFunds() < 10f)
+                        break;
+                    bulletSpending.SpendFunds(10f);
                     Instantiate(bulletShooter, mousePosition, bulletShooter.transform.rotation);
                     break;
                 case 5: // shoots two bullets at a 30 degree offset from the player
+                    if (bulletSpending.GetFunds() < 3f)
+                        break;
+                    bulletSpending.SpendFunds(3f);
                     target = playerReference.transform.position - mousePosition;
                     angle = Vector3.Angle(target, playerReference.transform.right);
                     if (mousePosition.y > playerReference.transform.position.y)
@@ -90,7 +109,7 @@ public class BulletPlayer : MonoBehaviour
             spawnPos = new Vector2(-30, 20);
             for (int i = 0; i < 16; i++)
             {
-                Instantiate(basicBullet, spawnPos, Quaternion.Euler(0, 0, -90));
+                Instantiate(snakingBullet, spawnPos, Quaternion.Euler(0, 0, -90));
                 spawnPos += spacing;
             }
             yield return new WaitForSeconds(0.4f);
