@@ -21,9 +21,11 @@ public class BulletPlayer : MonoBehaviour
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePosition.z = 0;
+            if (Vector2.Distance(mousePosition, playerReference.transform.position) < 5) // prevents placement of abilities being unfairly close to player
+                return; // prevents further traversal of Update()
             switch (bulletChoice)
             {
-                case 1:
+                case 1: // single fire bullet aimed directly at player
                     Vector3 target = playerReference.transform.position - mousePosition;
                     float angle = Vector3.Angle(target, playerReference.transform.right);
                     if (mousePosition.y > playerReference.transform.position.y)
@@ -31,15 +33,24 @@ public class BulletPlayer : MonoBehaviour
 
                     Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle));
                     break;
-                case 2:
+                case 2: // snaking lines of bullets from the top of the screen all the way to the bottom
                     if (!snakeActive)
                         StartCoroutine(SnakingPattern());
                     break;
-                case 3:
+                case 3: // shoots a number of bullets in a circle at mouse click
                     CircleShot(mousePosition);
                     break;
-                case 4:
+                case 4: // automatic bulllet shooter that spins and shoots for ten seconds
                     Instantiate(bulletShooter, mousePosition, bulletShooter.transform.rotation);
+                    break;
+                case 5: // shoots two bullets at a 30 degree offset from the player
+                    target = playerReference.transform.position - mousePosition;
+                    angle = Vector3.Angle(target, playerReference.transform.right);
+                    if (mousePosition.y > playerReference.transform.position.y)
+                        angle = angle * -1;
+
+                    Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle + 30));
+                    Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle - 30));
                     break;
                 default:
                     break;
