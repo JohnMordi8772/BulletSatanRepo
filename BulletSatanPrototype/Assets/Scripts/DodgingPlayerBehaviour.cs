@@ -25,7 +25,7 @@ public class DodgingPlayerBehaviour : MonoBehaviour
         if (iFrames == true)
         {
             StartInvincibilityFrames();
-            Invoke("EndInvincibilityFrames", .5f);
+            Invoke("EndInvincibilityFrames", 1.0f);
         }
         //gameObject.GetComponent<SpriteRenderer>().color = objectColor;
 
@@ -134,7 +134,9 @@ public class DodgingPlayerBehaviour : MonoBehaviour
     {
         if (collision.tag == "Bullet")
             StartCoroutine(Hit());
-
+        StartInvincibilityFrames();
+        Invoke("EndInvincibilityFrames", 1);
+        lives--;
     }
 
     IEnumerator Hit()
