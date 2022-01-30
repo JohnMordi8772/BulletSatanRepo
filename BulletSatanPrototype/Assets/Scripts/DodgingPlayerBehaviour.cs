@@ -27,7 +27,7 @@ public class DodgingPlayerBehaviour : MonoBehaviour
             StartInvincibilityFrames();
             Invoke("EndInvincibilityFrames", .5f);
         }
-        gameObject.GetComponent<SpriteRenderer>().color = objectColor;
+        //gameObject.GetComponent<SpriteRenderer>().color = objectColor;
 
         ManualPlayerMovement();
 
@@ -109,6 +109,7 @@ public class DodgingPlayerBehaviour : MonoBehaviour
         gameObject.tag = "iFrames";
         gameObject.layer = 6;
         objectColor.a = .5f;
+        gameObject.GetComponent<SpriteRenderer>().color = objectColor;
     }
     void EndInvincibilityFrames()
     {
@@ -116,6 +117,7 @@ public class DodgingPlayerBehaviour : MonoBehaviour
         gameObject.tag = "Player";
         gameObject.layer = 0;
         objectColor.a = 1;
+        gameObject.GetComponent<SpriteRenderer>().color = objectColor;
     }
     void Roll()
     {
@@ -138,8 +140,7 @@ public class DodgingPlayerBehaviour : MonoBehaviour
     IEnumerator Hit()
     {
         GetComponent<SpriteRenderer>().color = Color.red;
-        //yield return new WaitForSeconds(1f);
-        GetComponent<SpriteRenderer>().color = Color.blue;
-        yield break;
+        yield return new WaitForSeconds(1f);
+        GetComponent<SpriteRenderer>().color = objectColor;
     }
 }

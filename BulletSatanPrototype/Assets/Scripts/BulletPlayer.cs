@@ -27,7 +27,7 @@ public class BulletPlayer : MonoBehaviour
             switch (bulletChoice)
             {
                 case 1: // single fire bullet aimed directly at player
-                    if (bulletSpending.GetFunds() < 1f)
+                    if (bulletSpending.GetFunds() < 1f) // POSSIBLY ADD A DELAY SO THAT PLAYER CAN HOLD RATHER THAN SPAMMING
                         break;
                     bulletSpending.SpendFunds(1f);
                     Vector3 target = playerReference.transform.position - mousePosition;
@@ -103,16 +103,16 @@ public class BulletPlayer : MonoBehaviour
     {
         snakeActive = true;
         Vector2 spawnPos;
-        Vector2 spacing = new Vector2(4, 0);
+        Vector2 spacing = new Vector2(5, 0);
         for (int j = 0; j < 20; j++)
         {
             spawnPos = new Vector2(-30, 20);
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 13; i++)
             {
                 Instantiate(snakingBullet, spawnPos, Quaternion.Euler(0, 0, -90));
                 spawnPos += spacing;
             }
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSeconds(0.5f);
         }
         snakeActive = false;
         yield break;
