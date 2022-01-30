@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Boundaries
   - iFrames
+  - Walls
   layers:
   - Default
   - TransparentFX

@@ -25,11 +25,12 @@ public class BulletMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Boundaries")
+        if(collision.tag == "Boundaries")
         {
             Destroy(gameObject);
         }
     }
+
 }
