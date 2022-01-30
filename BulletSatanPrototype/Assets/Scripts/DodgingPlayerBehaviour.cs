@@ -127,4 +127,19 @@ public class DodgingPlayerBehaviour : MonoBehaviour
     {
         canRoll = true;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Bullet")
+            StartCoroutine(Hit());
+
+    }
+
+    IEnumerator Hit()
+    {
+        GetComponent<SpriteRenderer>().color = Color.red;
+        //yield return new WaitForSeconds(1f);
+        GetComponent<SpriteRenderer>().color = Color.blue;
+        yield break;
+    }
 }
