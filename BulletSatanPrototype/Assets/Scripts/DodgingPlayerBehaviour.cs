@@ -15,10 +15,12 @@ public class DodgingPlayerBehaviour : MonoBehaviour
     public Text LivesText;
     public bool isHit;
     public GameObject loseText;
+    public string currentInput;
+    public Rigidbody2D rb2d;
     // Start is called before the first frame update
     void Start()
     {
-
+        rb2d = gameObject.GetComponent<Rigidbody2D>();
         lives = 3;
         iFrames = false;
         canRoll = true;
@@ -58,6 +60,8 @@ public class DodgingPlayerBehaviour : MonoBehaviour
     {
         if (Input.GetKey("w"))
         {
+            currentInput = "w";
+
             float yMove = 1;
 
             Vector3 NewPos = transform.position;
@@ -71,6 +75,8 @@ public class DodgingPlayerBehaviour : MonoBehaviour
 
         if (Input.GetKey("s"))
         {
+            currentInput = "s";
+
             float yMove = -1;
 
             Vector3 NewPos = transform.position;
@@ -83,6 +89,8 @@ public class DodgingPlayerBehaviour : MonoBehaviour
         }
         if (Input.GetKey("d"))
         {
+            currentInput = "d";
+
             float xMove = 1;
 
             Vector3 NewPos = transform.position;
@@ -96,6 +104,8 @@ public class DodgingPlayerBehaviour : MonoBehaviour
 
         if (Input.GetKey("a"))
         {
+            currentInput = "a";
+
             float xMove = -1;
 
             Vector3 NewPos = transform.position;
@@ -107,11 +117,16 @@ public class DodgingPlayerBehaviour : MonoBehaviour
             transform.position = NewPos;
         }
 
-        if(Input.GetKeyDown("space") && canRoll == true)
+       
+    }
+
+    private void FixedUpdate()
+    {
+        if (Input.GetKeyDown("space") && canRoll == true)
         {
             Roll();
-        }    
-    }    
+        }   
+    }
 
     void Restart()
     {
@@ -146,12 +161,33 @@ public class DodgingPlayerBehaviour : MonoBehaviour
         objectColor.a = 1;
         isHit = false;
         gameObject.GetComponent<SpriteRenderer>().color = objectColor;
+        rb2d.velocity = new Vector2(0, 0);
     }
     //sets bools to true so the player gets some invincibility frames
     void Roll()
     {
         iFrames = true;
         canRoll = false;
+
+        switch(currentInput)
+        {
+            case "w":
+                rb2d.AddForce(transform.up * 200);
+                break;
+            case "s":
+                rb2d.AddForce(transform.up * -200);
+                break;
+            case "a":
+                rb2d.AddForce(transform.right * -200);
+                break;
+            case "d":
+                rb2d.AddForce(transform.right * 200);
+                break;
+            default:
+                rb2d.velocity = new Vector2(0, 0);
+                break;
+        }
+
         Invoke("RollReset", 3.0f);
     }
     //cooldown for roll
