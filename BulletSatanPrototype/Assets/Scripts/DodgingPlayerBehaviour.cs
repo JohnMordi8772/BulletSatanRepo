@@ -43,7 +43,7 @@ public class DodgingPlayerBehaviour : MonoBehaviour
 
         LivesText.text = "Lives: " + lives;
 
-        if(lives == 0)
+        if(lives <= 0)
         {
             loseText.SetActive(true);
             Time.timeScale = 0.2f;
