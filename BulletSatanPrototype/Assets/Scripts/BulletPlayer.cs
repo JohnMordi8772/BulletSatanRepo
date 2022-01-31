@@ -9,10 +9,19 @@ public class BulletPlayer : MonoBehaviour
     [SerializeField] BulletSpending bulletSpending;
     int bulletChoice = 0; // choices of ability for switch statement
     bool snakeActive; //for the snaking pattern bullet ability
+
+    public GameObject StandardSquare;
+    public GameObject SnakeSquare;
+    public GameObject BurstSquare;
+    public GameObject SpinSquare;
+    public GameObject SplitSquare;
+    public Color nonchosenColor;
+    public Color chosenColor;
     // Start is called before the first frame update
     void Start()
     {
-        
+        nonchosenColor = StandardSquare.GetComponent<SpriteRenderer>().color;
+        chosenColor = new Color(1.0f, .8f, .4f, .5f);
     }
 
     // Update is called once per frame
@@ -40,6 +49,7 @@ public class BulletPlayer : MonoBehaviour
                 case 2: // snaking lines of bullets from the top of the screen all the way to the bottom
                     if (bulletSpending.GetFunds() < 15f)
                         break;
+
 
                     if (!snakeActive)
                     {
@@ -76,15 +86,51 @@ public class BulletPlayer : MonoBehaviour
             }
         }
         if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
+        {
             bulletChoice = 1;
+            StandardSquare.GetComponent<SpriteRenderer>().color = chosenColor;
+            SnakeSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            BurstSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SpinSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SplitSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+        }
+
         else if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2))
+        { 
             bulletChoice = 2;
+            StandardSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SnakeSquare.GetComponent<SpriteRenderer>().color = chosenColor;
+            BurstSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SpinSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SplitSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+        }
         else if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
+        {
             bulletChoice = 3;
+            StandardSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SnakeSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            BurstSquare.GetComponent<SpriteRenderer>().color = chosenColor;
+            SpinSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SplitSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+        }
         else if (Input.GetKeyDown(KeyCode.Keypad4) || Input.GetKeyDown(KeyCode.Alpha4))
+        { 
             bulletChoice = 4;
+            StandardSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SnakeSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            BurstSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SpinSquare.GetComponent<SpriteRenderer>().color = chosenColor;
+            SplitSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+        }
         else if (Input.GetKeyDown(KeyCode.Keypad5) || Input.GetKeyDown(KeyCode.Alpha5))
+        { 
             bulletChoice = 5;
+            StandardSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SnakeSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            BurstSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SpinSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
+            SplitSquare.GetComponent<SpriteRenderer>().color = chosenColor;
+        }
         
     }
 

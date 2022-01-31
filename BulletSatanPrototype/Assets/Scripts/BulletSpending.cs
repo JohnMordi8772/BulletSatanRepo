@@ -24,7 +24,7 @@ public class BulletSpending : MonoBehaviour
 
     void UpdateFundText()
     {
-        fundText.text = funds + "/" + maxFunds;
+        fundText.text = "Money: " + funds + "/" + maxFunds;
     }
 
     public float GetFunds()
