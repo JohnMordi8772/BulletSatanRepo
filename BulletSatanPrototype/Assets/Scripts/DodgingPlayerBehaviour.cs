@@ -115,7 +115,7 @@ public class DodgingPlayerBehaviour : MonoBehaviour
 
     void Restart()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
         Time.timeScale = 1;
     }
     
