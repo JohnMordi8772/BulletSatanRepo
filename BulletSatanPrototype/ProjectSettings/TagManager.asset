@@ -8,6 +8,7 @@ TagManager:
   - iFrames
   - Walls
   - Bullet
+  - Guard
   layers:
   - Default
   - TransparentFX
