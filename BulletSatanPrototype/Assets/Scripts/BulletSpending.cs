@@ -7,11 +7,13 @@ public class BulletSpending : MonoBehaviour
 {
     float funds, maxFunds;
     [SerializeField] Text fundText;
+    bool pressed;
     // Start is called before the first frame update
     void Start()
     {
         maxFunds = 50;
         funds = 25;
+        pressed = false;
         UpdateFundText();
         StartCoroutine(EarningFunds());
     }
@@ -19,7 +21,7 @@ public class BulletSpending : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+            
     }
 
     void UpdateFundText()
@@ -42,12 +44,15 @@ public class BulletSpending : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSeconds(1f);
-            if (funds < maxFunds - 1)
-                funds += 2;
-            else if (funds != maxFunds)
-                funds++;
-            UpdateFundText();
+            yield return new WaitForSecondsRealtime(1f);
+            if (!BulletPlayer.shiftDown)
+            {
+                if (funds < maxFunds - 1)
+                    funds += 2;
+                else if (funds != maxFunds)
+                    funds++;
+                UpdateFundText();
+            }
         }
     }
 }

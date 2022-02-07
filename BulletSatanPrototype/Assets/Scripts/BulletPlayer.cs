@@ -9,6 +9,9 @@ public class BulletPlayer : MonoBehaviour
     [SerializeField] BulletSpending bulletSpending;
     int bulletChoice = 0; // choices of ability for switch statement
     bool snakeActive; //for the snaking pattern bullet ability
+    public static bool shiftDown = false;
+    List<string> methods;
+    List<Vector3> mousePositions;
 
     public GameObject StandardSquare;
     public GameObject SnakeSquare;
@@ -39,20 +42,23 @@ public class BulletPlayer : MonoBehaviour
                     if (bulletSpending.GetFunds() < 1f) // POSSIBLY ADD A DELAY SO THAT PLAYER CAN HOLD RATHER THAN SPAMMING
                         break;
                     bulletSpending.SpendFunds(1f);
-                    Vector3 target = playerReference.transform.position - mousePosition;
-                    float angle = Vector3.Angle(target, playerReference.transform.right);
-                    if (mousePosition.y > playerReference.transform.position.y)
-                        angle = angle * -1;
+                    StartCoroutine(BasicShot(mousePosition));
+                    //if(shiftDown)
+                    //{
+                    //    methods.Add("BasicShot");
+                    //}
 
-                    Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle));
+                    //if (mousePosition.y > playerReference.transform.position.y)
+                        //angle = angle * -1;
+
+                    //Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle));
                     break;
                 case 2: // snaking lines of bullets from the top of the screen all the way to the bottom
                     if (bulletSpending.GetFunds() < 15f)
                         break;
-
-
                     if (!snakeActive)
                     {
+                        snakeActive = true;
                         bulletSpending.SpendFunds(15f);
                         StartCoroutine(SnakingPattern());
                     }
@@ -61,25 +67,27 @@ public class BulletPlayer : MonoBehaviour
                     if (bulletSpending.GetFunds() < 5f)
                         break;
                     bulletSpending.SpendFunds(5f);
-                    CircleShot(mousePosition);
+                    StartCoroutine(CircleShot(mousePosition));
                     break;
                 case 4: // automatic bulllet shooter that spins and shoots for ten seconds
                     if (bulletSpending.GetFunds() < 10f)
                         break;
                     bulletSpending.SpendFunds(10f);
-                    Instantiate(bulletShooter, mousePosition, bulletShooter.transform.rotation);
+                    StartCoroutine(BulletShooter(mousePosition));
+                    //Instantiate(bulletShooter, mousePosition, bulletShooter.transform.rotation);
                     break;
                 case 5: // shoots two bullets at a 30 degree offset from the player
                     if (bulletSpending.GetFunds() < 3f)
                         break;
                     bulletSpending.SpendFunds(3f);
-                    target = playerReference.transform.position - mousePosition;
-                    angle = Vector3.Angle(target, playerReference.transform.right);
-                    if (mousePosition.y > playerReference.transform.position.y)
-                        angle = angle * -1;
+                    StartCoroutine(SplitShot(mousePosition));
+                    //target = playerReference.transform.position - mousePosition;
+                    //angle = Vector3.Angle(target, playerReference.transform.right);
+                    //if (mousePosition.y > playerReference.transform.position.y)
+                      //  angle = angle * -1;
 
-                    Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle + 30));
-                    Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle - 30));
+                    //Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle + 30));
+                    //Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle - 30));
                     break;
                 default:
                     break;
@@ -131,23 +139,67 @@ public class BulletPlayer : MonoBehaviour
             SpinSquare.GetComponent<SpriteRenderer>().color = nonchosenColor;
             SplitSquare.GetComponent<SpriteRenderer>().color = chosenColor;
         }
+        if (Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift))
+        {
+            shiftDown = true;
+        }
+        else
+        {
+            shiftDown = false;
+        }
         
     }
 
-    void CircleShot(Vector2 mousePos)
+    IEnumerator BasicShot(Vector3 mousePosition)
     {
+        while (shiftDown)
+            yield return new WaitForEndOfFrame();
+        Vector3 target = playerReference.transform.position - mousePosition;
+        float angle = Vector3.Angle(target, playerReference.transform.right);
+        if (mousePosition.y > playerReference.transform.position.y)
+            angle = angle * -1;
+
+        Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle));
+    }
+
+    IEnumerator SplitShot(Vector3 mousePosition)
+    {
+        while (shiftDown)
+            yield return new WaitForEndOfFrame();
+        Vector3 target = playerReference.transform.position - mousePosition;
+        float angle = Vector3.Angle(target, playerReference.transform.right);
+        if (mousePosition.y > playerReference.transform.position.y)
+            angle = angle * -1;
+
+        Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle + 30));
+        Instantiate(basicBullet, mousePosition, Quaternion.Euler(0, 0, angle - 30));
+    }
+
+    IEnumerator BulletShooter(Vector3 mousePosition)
+    {
+        while (shiftDown)
+            yield return new WaitForEndOfFrame();
+        Instantiate(bulletShooter, mousePosition, bulletShooter.transform.rotation);
+        yield break;
+    }
+
+    IEnumerator CircleShot(Vector3 mousePos)
+    {
+        while (shiftDown)
+            yield return new WaitForEndOfFrame();
         float z = 0; //represents the z rotation when spawning the bullets
         for (int i = 0; i < 8; i++)
         {
             Instantiate(basicBullet, mousePos, Quaternion.Euler(0, 0, z));
             z += 45f;
         }
-
+        yield break;
     }
 
     IEnumerator SnakingPattern()
     {
-        snakeActive = true;
+        while (shiftDown)
+            yield return new WaitForEndOfFrame();
         Vector2 spawnPos;
         Vector2 spacing = new Vector2(5, 0);
         for (int j = 0; j < 20; j++)
