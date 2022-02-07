@@ -15,8 +15,10 @@ public class DodgingPlayerBehaviour : MonoBehaviour
     public Text LivesText;
     public bool isHit;
     public GameObject loseText;
-    public string currentInput;
     public Rigidbody2D rb2d;
+    public bool canBlock;
+
+    public GameObject leftGuard, rightGuard, bottomGuard, topGuard;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +28,7 @@ public class DodgingPlayerBehaviour : MonoBehaviour
         canRoll = true;
         objectColor = gameObject.GetComponent<SpriteRenderer>().color;
         hitColor = new Color(1, 0, 0, .5f);
-        
+        canBlock = true;
     }
 
     // Update is called once per frame
@@ -53,6 +55,8 @@ public class DodgingPlayerBehaviour : MonoBehaviour
             
         }
 
+
+        Block();
     }
 
     //Allows for actual input by a player
@@ -60,7 +64,7 @@ public class DodgingPlayerBehaviour : MonoBehaviour
     {
         if (Input.GetKey("w"))
         {
-            currentInput = "w";
+           
 
             float yMove = 1;
 
@@ -75,7 +79,7 @@ public class DodgingPlayerBehaviour : MonoBehaviour
 
         if (Input.GetKey("s"))
         {
-            currentInput = "s";
+            
 
             float yMove = -1;
 
@@ -87,9 +91,11 @@ public class DodgingPlayerBehaviour : MonoBehaviour
 
             transform.position = NewPos;
         }
+
+
         if (Input.GetKey("d"))
         {
-            currentInput = "d";
+          
 
             float xMove = 1;
 
@@ -102,9 +108,10 @@ public class DodgingPlayerBehaviour : MonoBehaviour
             transform.position = NewPos;
         }
 
+
         if (Input.GetKey("a"))
         {
-            currentInput = "a";
+            
 
             float xMove = -1;
 
@@ -117,15 +124,11 @@ public class DodgingPlayerBehaviour : MonoBehaviour
             transform.position = NewPos;
         }
 
-       
-    }
 
-    private void FixedUpdate()
-    {
         if (Input.GetKeyDown("space") && canRoll == true)
         {
             Roll();
-        }   
+        }
     }
 
     void Restart()
@@ -160,35 +163,24 @@ public class DodgingPlayerBehaviour : MonoBehaviour
         gameObject.layer = 0;
         objectColor.a = 1;
         isHit = false;
+
+        speed = 5;
+
         gameObject.GetComponent<SpriteRenderer>().color = objectColor;
         rb2d.velocity = new Vector2(0, 0);
+
     }
     //sets bools to true so the player gets some invincibility frames
     void Roll()
     {
         iFrames = true;
-        canRoll = false;
+        
 
-        switch(currentInput)
-        {
-            case "w":
-                rb2d.AddForce(transform.up * 200);
-                break;
-            case "s":
-                rb2d.AddForce(transform.up * -200);
-                break;
-            case "a":
-                rb2d.AddForce(transform.right * -200);
-                break;
-            case "d":
-                rb2d.AddForce(transform.right * 200);
-                break;
-            default:
-                rb2d.velocity = new Vector2(0, 0);
-                break;
-        }
+        speed = 10;
 
         Invoke("RollReset", 3.0f);
+
+        canRoll = false;
     }
     //cooldown for roll
     void RollReset()
@@ -208,4 +200,67 @@ public class DodgingPlayerBehaviour : MonoBehaviour
         
     }
 
+    void Block()
+    {
+        if(canBlock == true)
+        {
+            if (Input.GetKeyDown("up"))
+            {
+                topGuard.SetActive(true);
+                bottomGuard.SetActive(false);
+                leftGuard.SetActive(false);
+                rightGuard.SetActive(false);
+                canBlock = false;
+                Invoke("ResetBlockPart1", 2);
+
+            }
+            if (Input.GetKeyDown("down"))
+            {
+                topGuard.SetActive(false);
+                bottomGuard.SetActive(true);
+                leftGuard.SetActive(false);
+                rightGuard.SetActive(false);
+                canBlock = false;
+                Invoke("ResetBlockPart1", 2);
+
+            }
+            if (Input.GetKeyDown("left"))
+            {
+                topGuard.SetActive(false);
+                bottomGuard.SetActive(false);
+                leftGuard.SetActive(true);
+                rightGuard.SetActive(false);
+                canBlock = false;
+                Invoke("ResetBlockPart1", 2);
+
+            }
+            if (Input.GetKeyDown("right"))
+            {
+                topGuard.SetActive(false);
+                bottomGuard.SetActive(false);
+                leftGuard.SetActive(false);
+                rightGuard.SetActive(true);
+                canBlock = false;
+                Invoke("ResetBlockPart1", 2);
+
+            }
+
+
+        }
+
+    }
+
+    void ResetBlockPart1()
+    {
+        topGuard.SetActive(false);
+        bottomGuard.SetActive(false);
+        leftGuard.SetActive(false);
+        rightGuard.SetActive(false);
+
+        Invoke("ResetBlockPart2", 2);
+    }
+    void ResetBlockPart2()
+    {
+        canBlock = true;
+    }
 }
